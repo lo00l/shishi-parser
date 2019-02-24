@@ -1,10 +1,10 @@
 <?php
 
-namespace Shishi\Parsers;
+namespace App\Parsers;
 
-use Shishi\AssetManager;
-use Shishi\Product;
-use Shishi\ProductAttribute;
+use App\AssetManager;
+use App\Product;
+use App\ProductAttribute;
 
 class ProductParser extends BaseParser
 {

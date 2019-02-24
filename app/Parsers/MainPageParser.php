@@ -1,9 +1,9 @@
 <?php
 
-namespace Shishi\Parsers;
+namespace App\Parsers;
 
-use Shishi\AssetManager;
-use Shishi\Category;
+use App\AssetManager;
+use App\Category;
 
 class MainPageParser extends BaseParser
 {

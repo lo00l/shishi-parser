@@ -2,7 +2,7 @@
 
 namespace App\Parsers;
 
-use Shishi\AssetManager;
+use App\AssetManager;
 use App\Page;
 
 class CategoryParser extends BaseParser

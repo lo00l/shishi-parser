@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-class ProductAttribute extends Model
+class ProductAttribute extends EloquentModel
 {
     /**
      * @var string

@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aleksey
- * Date: 2019-02-09
- * Time: 11:11
- */
 
-namespace Shishi\Parsers;
+namespace App\Parsers;
 
-use Shishi\Product;
+use App\Product;
 
 class PageParser extends BaseParser
 {

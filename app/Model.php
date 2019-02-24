@@ -1,6 +1,6 @@
 <?php
 
-namespace Shishi;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
