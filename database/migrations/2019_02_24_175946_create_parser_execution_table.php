@@ -16,9 +16,9 @@ class CreateParserExecutionTable extends Migration
     {
         Schema::create('af_parser_execution', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime('started_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
-            $table->boolean('success')->default(true);
+            $table->boolean('success')->nullable();
             $table->integer('categories_count')->nullable();
             $table->integer('pages_count')->nullable();
             $table->integer('products_count')->nullable();

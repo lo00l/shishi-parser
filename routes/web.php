@@ -11,6 +11,5 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
-});
+$app->get('/', 'ExecutionController@index');
+$app->post('/run', 'ExecutionController@run');
