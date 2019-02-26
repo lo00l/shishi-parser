@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Category;
 use App\Execution;
 use App\IAssetManager;
 use App\Page;
@@ -9,6 +10,7 @@ use App\Parsers\CategoryParser;
 use App\Parsers\MainPageParser;
 use App\Parsers\PageParser;
 use App\Parsers\ProductParser;
+use App\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +35,9 @@ class ParseJob extends Job
             return;
         }
 
-        $execution->setAttribute('started_at', Carbon::now());
+        $startTime = Carbon::now();
+
+        $execution->setAttribute('started_at', $startTime);
         $execution->save();
 
         DB::beginTransaction();
@@ -74,6 +78,7 @@ class ParseJob extends Job
                         $productParser->setProductDetailData();
                         $product->save();
                     }
+                    break 2;
                 }
             }
         } catch (\Exception $e) {
@@ -92,6 +97,16 @@ class ParseJob extends Job
         $execution->setAttribute('pages_count', $pagesCount);
         $execution->setAttribute('products_count', $productsCount);
         $execution->save();
+
+        $category = new Category();
+        $page = new Page();
+        $product = new Product();
+
+        $s = $startTime->toDateString();
+        DB::table($category->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
+        DB::table($page->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
+        DB::table($product->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
+
         DB::commit();
     }
 }

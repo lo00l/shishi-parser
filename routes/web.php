@@ -11,5 +11,47 @@
 |
 */
 
-$app->get('/', 'ExecutionController@index');
+$app->get('/', [
+    'as' => 'main',
+    'uses' => 'ExecutionController@index',
+]);
 $app->post('/run', 'ExecutionController@run');
+
+$app->get('/categories', [
+    'as' => 'categories',
+    'uses' => 'CategoryController@index',
+]);
+$app->post('/categories/{id}/update', [
+    'as' => 'save_category',
+    'uses' => 'CategoryController@update'
+]);
+$app->post('/categories/upate-all', [
+    'as' => 'save_all_categories',
+    'uses' => 'CategoryController@updateAll',
+]);
+
+$app->get('/pages', [
+    'as' => 'pages',
+    'uses' => 'PageController@index',
+]);
+$app->post('/pages/{id}/update', [
+    'as' => 'save_page',
+    'uses' => 'PageController@update'
+]);
+$app->post('/pages/upate-all', [
+    'as' => 'save_all_pages',
+    'uses' => 'PageController@updateAll',
+]);
+
+$app->get('/products', [
+    'as' => 'products',
+    'uses' => 'ProductController@index',
+]);
+$app->post('/products/{id}/update', [
+    'as' => 'save_product',
+    'uses' => 'ProductController@update'
+]);
+$app->post('/products/upate-all', [
+    'as' => 'save_all_products',
+    'uses' => 'ProductController@updateAll',
+]);

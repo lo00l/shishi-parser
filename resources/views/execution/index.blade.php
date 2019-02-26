@@ -1,6 +1,13 @@
 @extends('layout')
 
+@section('title')Управление парсером@endsection
+
 @section('content')
+   <div>
+      <button class="btn btn-success btn-lg{{ $can_run ? '' : ' disabled' }} run-parser" id="run_parser">Запустить парсер</button>
+   </div>
+
+   {{ $executions->links() }}
    <table class="table table-bordered table-striped">
       <thead>
          <tr>
@@ -30,6 +37,5 @@
          @endforeach
       </tbody>
    </table>
-
-   <button class="btn btn-success btn-lg{{ $can_run ? '' : ' disabled' }}" id="run_parser">Запустить парсер</button>
+   {{ $executions->links() }}
 @endsection

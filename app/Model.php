@@ -44,4 +44,9 @@ abstract class Model extends BaseModel
     {
         return static::class . ': ' . parent::__toString();
     }
+
+    public function getCreateTimeAttribute()
+    {
+        return $this->getAttribute('created_at')->format('d.m.Y H:i:s');
+    }
 }

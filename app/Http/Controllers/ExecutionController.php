@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Execution;
 use App\Jobs\ParseJob;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class ExecutionController extends Controller
+class ExecutionController extends BaseController
 {
     public function index()
     {
-        $executions = Execution::get();
+        $executions = Execution::orderBy('id', 'desc')->paginate(50);
         $canRun = $executions->filter(function ($execution) {
             return is_null($execution->getAttribute('finished_at'));
         })->count() === 0;

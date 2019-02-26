@@ -16,6 +16,7 @@ class Category extends Model
         'original_id',
         'title',
         'preview_img',
+        'russian_title',
     ];
 
     /**

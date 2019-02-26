@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>@yield('title')</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -21,10 +21,10 @@
 <body>
 
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="/">Парсер</a></li>
-        <li role="presentation"><a href="/categories">Категории</a></li>
-        <li role="presentation"><a href="/pages">Страницы</a></li>
-        <li role="presentation"><a href="/products">Товары</a></li>
+        <li role="presentation"{!! app()->getCurrentRoute() === 'main' ? ' class="active"' : '' !!}><a href="/">Парсер</a></li>
+        <li role="presentation"{!! app()->getCurrentRoute() === 'categories' ? ' class="active"' : '' !!}><a href="/categories">Категории</a></li>
+        <li role="presentation"{!! app()->getCurrentRoute() === 'pages' ? ' class="active"' : '' !!}><a href="/pages">Страницы</a></li>
+        <li role="presentation"{!! app()->getCurrentRoute() === 'products' ? ' class="active"' : '' !!}><a href="/products">Товары</a></li>
     </ul>
 
     <div class="container text-center">

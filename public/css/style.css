@@ -1,3 +1,15 @@
 body {
     padding: 20px;
 }
+
+img.preview {
+    max-height: 30px;
+}
+
+.run-parser {
+    margin: 10px 0;
+}
+
+ul.pagination {
+    margin: 0;
+}

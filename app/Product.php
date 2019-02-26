@@ -28,6 +28,9 @@ class Product extends Model
         'vendor_code',
         'help_html',
         'img',
+
+        'russian_title',
+        'russian_help_html',
     ];
 
     /**
