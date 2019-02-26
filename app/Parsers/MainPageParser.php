@@ -4,6 +4,7 @@ namespace App\Parsers;
 
 use App\AssetManager;
 use App\Category;
+use App\IAssetManager;
 
 class MainPageParser extends BaseParser
 {
@@ -19,7 +20,7 @@ class MainPageParser extends BaseParser
             $url = $a->getAttribute('href');
 
             $img = $this->xpath->query('./*/img', $element)->item(0);
-            $imgUrl = AssetManager::saveImg($this->normalizeImg($img->getAttribute('src')));
+            $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
 
             $div = $this->xpath->query('.//div[contains(@class, \'category-name\')]', $element)->item(0);
             $title = $div->textContent;

@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\AssetManager;
 use App\Execution;
+use App\IAssetManager;
 use App\Page;
 use App\Parsers\CategoryParser;
 use App\Parsers\MainPageParser;
@@ -21,7 +21,7 @@ class ParseJob extends Job
         $this->executionId = $executionId;
     }
 
-    public function handle()
+    public function handle(IAssetManager $assetManager)
     {
         if (is_null($this->executionId)) {
             $execution = new Execution();
@@ -42,7 +42,7 @@ class ParseJob extends Job
         $pagesCount = 0;
         $productsCount = 0;
 
-        $mainParser = new MainPageParser('/');
+        $mainParser = new MainPageParser('/', $assetManager);
         try {
             /**
              * @var \App\Category $category
@@ -50,15 +50,15 @@ class ParseJob extends Job
             foreach ($mainParser as $key => $category) {
                 $categoriesCount++;
                 $category->save();
-                $categoryParser = new CategoryParser($category->getUrl());
+                $categoryParser = new CategoryParser($category->getUrl(), $assetManager);
                 /**
                  * @var Page $page
                  */
                 foreach ($categoryParser as $pageKey => $page) {
                     $pagesCount++;
                     $page->category()->associate($category);
-                    $pageParser = new PageParser($page->getUrl());
-                    $backgroundImgUrl = AssetManager::saveImg($pageParser->getBackgroundUrl());
+                    $pageParser = new PageParser($page->getUrl(), $assetManager);
+                    $backgroundImgUrl = $assetManager->saveImg($pageParser->getBackgroundUrl());
                     $page->setAttribute('background_img', $backgroundImgUrl);
                     $page->setAttribute('background_width', $pageParser->getBackgroundWidth());
                     $page->setAttribute('background_height', $pageParser->getBackgroundHeight());
@@ -70,7 +70,7 @@ class ParseJob extends Job
                         $productsCount++;
                         $product->page()->associate($page);
                         $product->save();
-                        $productParser = new ProductParser($product);
+                        $productParser = new ProductParser($product, $assetManager);
                         $productParser->setProductDetailData();
                         $product->save();
                     }

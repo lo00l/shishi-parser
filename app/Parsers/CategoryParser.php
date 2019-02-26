@@ -19,7 +19,7 @@ class CategoryParser extends BaseParser
             $url = $a->getAttribute('href');
 
             $img = $this->xpath->query('./a/img', $element)->item(0);
-            $imgUrl = AssetManager::saveImg($this->normalizeImg($img->getAttribute('src')));
+            $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
 
             $page = new Page($url, [
                 'original_id' => $this->extractId($url),

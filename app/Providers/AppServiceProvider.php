@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\AssetManager;
+use App\IAssetManager;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        AssetManager::init(env('DOMAIN'), env('IMG_PATH'), env('IMG_RELATIVE_PATH'));
+        $this->app->bind(IAssetManager::class, function ($app) {
+            return new AssetManager(env('DOMAIN'), env('IMG_PATH'), env('IMG_RELATIVE_PATH'));
+        });
     }
 }

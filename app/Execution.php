@@ -50,8 +50,12 @@ class Execution extends Model
 
     public function getIsSuccessAttribute()
     {
-        if (is_null($this->getAttribute('success'))) {
+        if (is_null($this->getAttribute('success')) && is_null($this->getAttribute('started_at'))) {
             return 'В очереди на выполнение';
+        }
+
+        if (is_null($this->getAttribute('success'))) {
+            return 'Выполняется сейчас';
         }
 
         return $this->getAttribute('success') ? 'Да' : 'Нет';

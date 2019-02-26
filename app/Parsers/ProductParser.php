@@ -3,6 +3,7 @@
 namespace App\Parsers;
 
 use App\AssetManager;
+use App\IAssetManager;
 use App\Product;
 use App\ProductAttribute;
 
@@ -16,11 +17,12 @@ class ProductParser extends BaseParser
     /**
      * ProductParser constructor.
      * @param Product $product
+     * @param IAssetManager $assetManager
      */
-    public function __construct($product)
+    public function __construct($product, IAssetManager $assetManager)
     {
         $this->product = $product;
-        parent::__construct($product->getUrl());
+        parent::__construct($product->getUrl(), $assetManager);
     }
 
     /**
@@ -41,7 +43,7 @@ class ProductParser extends BaseParser
         }
 
         $img = $this->xpath->query('//div[contains(@class, \'image\')]/img')->item(0);
-        $imgUrl = AssetManager::saveImg($this->normalizeImg($img->getAttribute('src')));
+        $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
         $this->product->setAttribute('img', $imgUrl);
 
         $parameters = $this->xpath->query('//div[contains(@class, \'parameter\')]');

@@ -2,6 +2,7 @@
 
 namespace App\Parsers;
 
+use App\IAssetManager;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -28,6 +29,11 @@ abstract class BaseParser implements \Iterator
      * @var Client
      */
     protected $client;
+
+    /**
+     * @var IAssetManager
+     */
+    protected $assetManager;
 
     /**
      * @var
@@ -57,8 +63,9 @@ abstract class BaseParser implements \Iterator
     /**
      * BaseParser constructor.
      * @param $url
+     * @param IAssetManager $assetManager
      */
-    public function __construct($url)
+    public function __construct($url, IAssetManager $assetManager)
     {
         $this->url = $url;
         $this->client = new Client([
@@ -66,6 +73,7 @@ abstract class BaseParser implements \Iterator
             'verify' => false,
             'timeout' => 10,
         ]);
+        $this->assetManager = $assetManager;
         $this->currentKey = 0;
     }
 
