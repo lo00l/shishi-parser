@@ -31,6 +31,22 @@ abstract class Controller extends BaseController
         return $this->success();
     }
 
+    public function updateAll(Request $request)
+    {
+        $modelClass = $this->getModelClass();
+        $data = $request->all();
+        foreach ($data as $id => $row)
+        {
+            $model = $modelClass::whereKey($id)->first();
+            if (!is_null($model)) {
+                $model->fill($row);
+                $model->save();
+            }
+        }
+
+        return $this->success();
+    }
+
     private function success()
     {
         return [

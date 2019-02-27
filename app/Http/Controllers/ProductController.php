@@ -28,7 +28,7 @@ class ProductController extends Controller
         if (!is_null($pageId)) {
             $query->where('page_id', $pageId);
         }
-        $products = $query->paginate(2);
+        $products = $query->paginate(50);
 
         return view('product.index', [
             'products' => $products->appends(Input::except('page')),

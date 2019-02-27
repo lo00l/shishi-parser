@@ -13,3 +13,11 @@ img.preview {
 ul.pagination {
     margin: 0;
 }
+
+table th {
+    text-align: center;
+}
+
+table td {
+    vertical-align: middle !important;
+}

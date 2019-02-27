@@ -31,5 +31,8 @@
         @endforeach
         </tbody>
     </table>
+    <div class="text-center">
+        <a href="{{ route('save_all_pages') }}" class="btn btn-success btn-lg" data-action="save-all">Сохранить все</a>
+    </div>
     {{ $pages->links() }}
 @endsection

@@ -25,7 +25,7 @@ $app->post('/categories/{id}/update', [
     'as' => 'save_category',
     'uses' => 'CategoryController@update'
 ]);
-$app->post('/categories/upate-all', [
+$app->post('/categories/update-all', [
     'as' => 'save_all_categories',
     'uses' => 'CategoryController@updateAll',
 ]);
@@ -38,7 +38,7 @@ $app->post('/pages/{id}/update', [
     'as' => 'save_page',
     'uses' => 'PageController@update'
 ]);
-$app->post('/pages/upate-all', [
+$app->post('/pages/update-all', [
     'as' => 'save_all_pages',
     'uses' => 'PageController@updateAll',
 ]);
@@ -51,7 +51,7 @@ $app->post('/products/{id}/update', [
     'as' => 'save_product',
     'uses' => 'ProductController@update'
 ]);
-$app->post('/products/upate-all', [
+$app->post('/products/update-all', [
     'as' => 'save_all_products',
     'uses' => 'ProductController@updateAll',
 ]);

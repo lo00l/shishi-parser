@@ -22,7 +22,7 @@
         </thead>
         <tbody>
         @foreach($categories as $category)
-            <tr>
+            <tr data-id="{{ $category->getAttribute('id') }}">
                 <td>{{ $category->getAttribute('id') }}</td>
                 <td>{{ $category->createTime }}</td>
                 <td>
@@ -37,5 +37,8 @@
         @endforeach
         </tbody>
     </table>
+    <div class="text-center">
+        <a href="{{ route('save_all_categories') }}" class="btn btn-success btn-lg" data-action="save-all">Сохранить все</a>
+    </div>
     {{ $categories->links() }}
 @endsection

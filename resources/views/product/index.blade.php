@@ -23,7 +23,7 @@
         </thead>
         <tbody>
         @foreach($products as $product)
-            <tr>
+            <tr data-id="{{ $product->getAttribute('id') }}">
                 <td>{{ $product->getAttribute('id') }}</td>
                 <td>{{ $product->createTime }}</td>
                 <td>
@@ -39,5 +39,8 @@
         @endforeach
         </tbody>
     </table>
+    <div class="text-center">
+        <a href="{{ route('save_all_products') }}" class="btn btn-success btn-lg" data-action="save-all">Сохранить все</a>
+    </div>
     {{ $products->links() }}
 @endsection

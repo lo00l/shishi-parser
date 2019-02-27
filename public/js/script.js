@@ -39,5 +39,37 @@ $(document).ready(function() {
                 btn.prop('disabled', false);
             }
         });
-    })
+    });
+
+    $('[data-action=save-all]').click(function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        var data = {};
+        $('tr[data-id]').each(function(index, tr) {
+            var row = {};
+            $('[data-id=' + $(tr).data('id') + '][data-attribute]').each(function(index, el) {
+                row[$(el).data('attribute')] = $(el).val();
+            });
+            data[$(tr).data('id')] = row;
+        });
+
+        $.ajax({
+            url: btn.attr('href'),
+            method: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                if (data['success']) {
+                    alert('Изменения сохранены');
+                    btn.prop('disabled', false);
+                } else {
+                    alert('Ошибка сохранения: ' + data.error);
+                }
+            },
+            error: function() {
+                alert('Ошибка сохранения');
+                btn.prop('disabled', false);
+            }
+        });
+    });
 });
