@@ -25,6 +25,8 @@ class ParseJob extends Job
 
     public function handle(IAssetManager $assetManager)
     {
+        libxml_use_internal_errors(true);
+
         if (is_null($this->executionId)) {
             $execution = new Execution();
             $execution->save();
@@ -78,7 +80,6 @@ class ParseJob extends Job
                         $productParser->setProductDetailData();
                         $product->save();
                     }
-                    break 2;
                 }
             }
         } catch (\Exception $e) {
@@ -89,9 +90,10 @@ class ParseJob extends Job
             $execution->setAttribute('pages_count', $pagesCount);
             $execution->setAttribute('products_count', $productsCount);
             $execution->save();
-            exit();
+            return;
         }
 
+        $execution->setAttribute('success', true);
         $execution->setAttribute('finished_at', \Carbon\Carbon::now());
         $execution->setAttribute('categories_count', $categoriesCount);
         $execution->setAttribute('pages_count', $pagesCount);
@@ -102,7 +104,6 @@ class ParseJob extends Job
         $page = new Page();
         $product = new Product();
 
-        $s = $startTime->toDateString();
         DB::table($category->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
         DB::table($page->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
         DB::table($product->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
