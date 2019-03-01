@@ -5,6 +5,7 @@ namespace App\Parsers;
 use App\IAssetManager;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Log;
 
 abstract class BaseParser implements \Iterator
 {
@@ -171,7 +172,7 @@ abstract class BaseParser implements \Iterator
             $this->items = $this->getItems();
             return true;
         } catch (GuzzleException $e) {
-//            Log::error("Couldn't load url {$this->url} page {$this->currentPage}. Error: " . $e->getMessage());
+            Log::error("Couldn't load url {$this->url} page {$this->currentPage}. Error: " . $e->getMessage());
             throw $e;
         }
     }
@@ -216,7 +217,7 @@ abstract class BaseParser implements \Iterator
     {
         preg_match('/\d+$/', $url, $match);
         if (count($match) === 0) {
-//            Log::error("Couldn't extract id from url $url");
+            Log::error("Couldn't extract id from url $url");
             return false;
         }
         return $match[0];

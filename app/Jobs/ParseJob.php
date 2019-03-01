@@ -13,6 +13,7 @@ use App\Parsers\ProductParser;
 use App\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ParseJob extends Job
 {
@@ -25,6 +26,8 @@ class ParseJob extends Job
 
     public function handle(IAssetManager $assetManager)
     {
+        Log::info('Entering parse job');
+
         libxml_use_internal_errors(true);
 
         if (is_null($this->executionId)) {
@@ -37,6 +40,8 @@ class ParseJob extends Job
             return;
         }
 
+        Log::info("Start parsing execution #{$this->executionId}");
+
         $startTime = Carbon::now();
 
         $execution->setAttribute('started_at', $startTime);
@@ -48,6 +53,7 @@ class ParseJob extends Job
         $pagesCount = 0;
         $productsCount = 0;
 
+        Log::info('Creating main parser');
         $mainParser = new MainPageParser('/', $assetManager);
         try {
             /**
@@ -56,6 +62,7 @@ class ParseJob extends Job
             foreach ($mainParser as $key => $category) {
                 $categoriesCount++;
                 $category->save();
+                Log::info("Creating category parser with url {$category->getUrl()}");
                 $categoryParser = new CategoryParser($category->getUrl(), $assetManager);
                 /**
                  * @var Page $page
@@ -63,6 +70,7 @@ class ParseJob extends Job
                 foreach ($categoryParser as $pageKey => $page) {
                     $pagesCount++;
                     $page->category()->associate($category);
+                    Log::info("Creating page parser with url {$page->getUrl()}");
                     $pageParser = new PageParser($page->getUrl(), $assetManager);
                     $backgroundImgUrl = $assetManager->saveImg($pageParser->getBackgroundUrl());
                     $page->setAttribute('background_img', $backgroundImgUrl);
@@ -79,10 +87,13 @@ class ParseJob extends Job
                         $productParser = new ProductParser($product, $assetManager);
                         $productParser->setProductDetailData();
                         $product->save();
+                        sleep(0.1);
                     }
                 }
             }
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
             DB::rollback();
             $execution->setAttribute('success', false);
             $execution->setAttribute('finished_at', \Carbon\Carbon::now());
@@ -93,6 +104,7 @@ class ParseJob extends Job
             return;
         }
 
+        Log::info("Finished parsing. Parsed $categoriesCount categories, $pagesCount pages, $productsCount products");
         $execution->setAttribute('success', true);
         $execution->setAttribute('finished_at', \Carbon\Carbon::now());
         $execution->setAttribute('categories_count', $categoriesCount);
@@ -100,6 +112,7 @@ class ParseJob extends Job
         $execution->setAttribute('products_count', $productsCount);
         $execution->save();
 
+        Log::info('Deleting items which has not been updated');
         $category = new Category();
         $page = new Page();
         $product = new Product();
@@ -109,5 +122,7 @@ class ParseJob extends Job
         DB::table($product->getTable())->where('updated_at', '<', $startTime->toDateTimeString())->delete();
 
         DB::commit();
+
+        Log::info('Exiting parse job');
     }
 }

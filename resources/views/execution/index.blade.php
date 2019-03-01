@@ -32,7 +32,7 @@
                <td>{{ $execution->isSuccess }}</td>
                <td>{{ $execution->getAttribute('categories_count') }}</td>
                <td>{{ $execution->getAttribute('pages_count') }}</td>
-               <td>{{ $execution->getAttribute('cproducts_count') }}</td>
+               <td>{{ $execution->getAttribute('products_count') }}</td>
             </tr>
          @endforeach
       </tbody>

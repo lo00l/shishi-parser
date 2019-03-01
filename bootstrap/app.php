@@ -1,5 +1,9 @@
 <?php
 
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -96,5 +100,29 @@ $app->singleton(
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
+
+$app->configureMonologUsing(function ($monolog) {
+    $infoHandler = new RotatingFileHandler(
+        env('INFO_LOG_PATH') . DIRECTORY_SEPARATOR . 'info.log',
+        0,
+        Logger::INFO,
+        false
+    );
+    $infoHandler->setFilenameFormat('{filename}-{date}', RotatingFileHandler::FILE_PER_DAY);
+    $monolog->pushHandler($infoHandler);
+
+    $errorHandler = new RotatingFileHandler(
+        env('ERROR_LOG_PATH') . DIRECTORY_SEPARATOR . 'error.log',
+        0,
+        Logger::ERROR,
+        false
+    );
+    $infoHandler->setFilenameFormat('{filename}-{date}', RotatingFileHandler::FILE_PER_DAY);
+    $monolog->pushHandler($errorHandler);
+
+    return $monolog;
+});
+
+$app->alias('Log', \Illuminate\Support\Facades\Log::class);
 
 return $app;

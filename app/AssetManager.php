@@ -4,6 +4,7 @@ namespace App;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Log;
 
 class AssetManager implements IAssetManager
 {
@@ -30,7 +31,7 @@ class AssetManager implements IAssetManager
     {
         $info = pathinfo($url);
         if (!isset($info['extension'])) {
-//            Log::error('Couldn\'t get image extension: ' . json_encode($info));
+            Log::error('Couldn\'t get image extension: ' . json_encode($info));
             return false;
         }
 
@@ -41,7 +42,7 @@ class AssetManager implements IAssetManager
                 'sink' => $filePath,
             ]);
         } catch (GuzzleException $e) {
-//            Log::error("Couldn't download image from $url to $filePath. Error: " . $e->getMessage());
+            Log::error("Couldn't download image from $url to $filePath. Error: " . $e->getMessage());
             return false;
         }
 
