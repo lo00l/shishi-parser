@@ -11,16 +11,15 @@ class MainPageParser extends BaseParser
     public function getItems()
     {
         $items = [];
-        $elements = $this->xpath->query('//div[contains(@class, \'list-container\')]/*/li');
+        $elements = $this->xpath->query('//div[contains(@class, \'list-container\')]/a');
         /**
          * @var \DOMElement $element
          */
         foreach ($elements as $element) {
-            $a = $this->xpath->query('./a', $element)->item(0);
-            $url = $a->getAttribute('href');
+            $url = $element->getAttribute('href');
 
-            $img = $this->xpath->query('./*/img', $element)->item(0);
-            $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
+            $img = $this->xpath->query('./img', $element)->item(0);
+            $imgUrl = $this->assetManager->saveImg($img->getAttribute('src'));
 
             $div = $this->xpath->query('.//div[contains(@class, \'category-name\')]', $element)->item(0);
             $title = $div->textContent;

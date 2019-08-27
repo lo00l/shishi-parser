@@ -10,16 +10,15 @@ class CategoryParser extends BaseParser
     public function getItems()
     {
         $items = [];
-        $elements = $this->xpath->query('//div[contains(@class, \'spacer\')]');
+        $elements = $this->xpath->query('//div[contains(@class, \'list-container\')]/a');
         /**
          * @var \DOMElement $element
          */
         foreach ($elements as $element) {
-            $a = $this->xpath->query('./a', $element)->item(0);
-            $url = $a->getAttribute('href');
+            $url = $element->getAttribute('href');
 
-            $img = $this->xpath->query('./a/img', $element)->item(0);
-            $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
+            $img = $this->xpath->query('./img', $element)->item(0);
+            $imgUrl = $this->assetManager->saveImg($img->getAttribute('src'));
 
             $page = new Page($url, [
                 'original_id' => $this->extractId($url),

@@ -91,6 +91,8 @@ class ParseJob extends Job
                     }
                 }
             }
+        } catch (GuzzleException $e) {
+            
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());

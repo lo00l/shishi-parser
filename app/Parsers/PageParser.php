@@ -61,7 +61,7 @@ class PageParser extends BaseParser
             $this->loadNextPage();
         }
         $img = $this->xpath->query('//img[contains(@class, \'map\')]')->item(0);
-        return $this->normalizeImg($img->getAttribute('src'));
+        return $img->getAttribute('src');
     }
 
     public function getBackgroundWidth()

@@ -43,7 +43,11 @@ class ProductParser extends BaseParser
         }
 
         $img = $this->xpath->query('//div[contains(@class, \'image\')]/img')->item(0);
-        $imgUrl = $this->assetManager->saveImg($this->normalizeImg($img->getAttribute('src')));
+        if (!is_null($img)) {
+            $imgUrl = $this->assetManager->saveImg($img->getAttribute('src'));
+        } else {
+            $imgUrl = '';
+        }
         $this->product->setAttribute('img', $imgUrl);
 
         $parameters = $this->xpath->query('//div[contains(@class, \'parameter\')]');
@@ -61,7 +65,7 @@ class ProductParser extends BaseParser
         $helpUl = $this->xpath->query('//ul[contains(@class, \'help\')]')->item(0);
         $this->product->setAttribute('help_html', $this->document->saveXML($helpUl));
 
-        $vendorCodeH3 = $this->xpath->query('//div[contains(@class, \'product-info\')]/h3')->item(0);
+        $vendorCodeH3 = $this->xpath->query('//div[contains(@class, \'product__details-box\')]/h3')->item(0);
         $this->product->setAttribute('available', $vendorCodeH3->getAttribute('class') !== 'unavailable');
     }
 }

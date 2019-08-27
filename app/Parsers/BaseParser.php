@@ -160,21 +160,17 @@ abstract class BaseParser implements \Iterator
             return false;
         }
         $this->incrementPage();
-        try {
-            $response = $this->client->get($this->url, [
-                'query' => [
-                    'page' => $this->currentPage,
-                ]
-            ]);
-            $this->document = new \DOMDocument();
-            $this->document->loadHTML($response->getBody(), LIBXML_NOWARNING | LIBXML_NOERROR);
-            $this->xpath = new \DOMXPath($this->document);
-            $this->items = $this->getItems();
-            return true;
-        } catch (GuzzleException $e) {
-            Log::error("Couldn't load url {$this->url} page {$this->currentPage}. Error: " . $e->getMessage());
-            throw $e;
+        $response = $this->fetch($this->url, ['page' => $this->currentPage]);
+        if (is_null($response)) {
+            Log::error("Couldn't load next page {$this->currentPage}");
+            return false;
         }
+
+        $this->document = new \DOMDocument();
+        $this->document->loadHTML($response, LIBXML_NOWARNING | LIBXML_NOERROR);
+        $this->xpath = new \DOMXPath($this->document);
+        $this->items = $this->getItems();
+        return true;
     }
 
     /**
@@ -230,5 +226,21 @@ abstract class BaseParser implements \Iterator
     protected function normalizeImg($name)
     {
         return explode('?', $name)[0];
+    }
+
+    protected function fetch($url, $query, $tries = 3, $timeout = 30)
+    {
+        for ($i = 0; $i < $tries; $i++) {
+            try {
+                $response = $this->client->get($this->url, [
+                    'query' => $query
+                ]);
+                return $response->getBody();
+            } catch (GuzzleException $e) {
+                Log::error("Couldn't load url {$this->url} page {$this->currentPage}. Error: " . $e->getMessage());
+                sleep($timeout);
+            }
+        }
+        return null;
     }
 }
